@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Panel de Administración</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="https://thebiz.me/wp-content/uploads/2020/11/hair-salon-logo-ideas-6.24.22-PM.png" alt="Logo Barbería" class="header-logo">
+        <div class="header-content">
+            <h1>Panel de Administración</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Volver a la Web</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="login">
+        <div class="login-container">
+            <h2 class="titulo-seccion">Iniciar Sesión</h2>
+            <form id="loginForm" class="formulario-login">
+                <div class="form-grupo">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username" required>
+                </div>
+                <div class="form-grupo">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" name="password" required>
+                </div>
+                <button type="submit" class="boton-dorado">Iniciar Sesión</button>
+            </form>
+            <div id="notification" class="notification" style="display: none;">
+                <p id="notification-message"></p>
+                <span class="close-notification">&times;</span>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>Contacto: info@barberia-elegante.com | Tel: 123-456-789</p>
+        <p>Dirección: Calle Principal 123, Ciudad</p>
+    </footer>
+
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="firebase-config.js"></script>
+    <script src="login.js"></script>
+</body>
+</html> 

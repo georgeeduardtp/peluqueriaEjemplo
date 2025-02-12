@@ -1,97 +1,209 @@
-body {
-    font-family: 'Roboto', sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #0d1117; /* Fondo oscuro para la página */
-    color: #c9d1d9; /* Texto claro para mejor contraste */
+#reserva {
+    min-height: calc(100vh - 140px);
+    background-color: var(--color-negro);
+    padding: 60px 20px;
 }
 
-header {
-    background-color: #161b22; /* Fondo del encabezado oscuro */
+.reserva-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background-color: var(--color-gris-oscuro);
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    border: 1px solid var(--color-dorado);
+}
+
+.formulario-cita {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.form-grupo {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-grupo label {
+    color: var(--color-blanco);
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.form-grupo input,
+.form-grupo select,
+.form-grupo textarea {
+    padding: 12px;
+    border: 2px solid var(--color-gris-claro);
+    border-radius: 5px;
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+    font-family: 'Montserrat', Arial, sans-serif;
+    transition: border-color 0.3s ease;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus,
+.form-grupo textarea:focus {
+    outline: none;
+    border-color: var(--color-dorado);
+}
+
+.form-grupo textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.boton-dorado {
+    background-color: var(--color-dorado);
+    color: var(--color-negro);
+    padding: 15px 30px;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 20px;
+}
+
+.boton-dorado:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Estilos para los campos de tipo date y time */
+input[type="date"],
+input[type="time"] {
+    color-scheme: dark;
+}
+
+/* Estilos para el select */
+select option {
+    background-color: var(--color-negro);
+    color: var(--color-blanco);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .reserva-container {
+        padding: 20px;
+    }
+
+    .form-grupo input,
+    .form-grupo select,
+    .form-grupo textarea {
+        padding: 10px;
+    }
+
+    .boton-dorado {
+        padding: 12px 25px;
+        font-size: 16px;
+    }
+}
+
+.horas-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.hora-item {
+    position: relative;
+}
+
+.hora-item input[type="radio"] {
+    display: none;
+}
+
+.hora-item label {
+    display: block;
+    padding: 10px;
     text-align: center;
-    padding: 20px; /* Espaciado interno */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra suave */
-}
-
-header h1 {
-    color: #c70000; /* Color rojo para el título */
-    font-size: 2.5em; /* Tamaño del texto */
-    margin: 0; /* Eliminar margen */
-}
-
-form {
-    max-width: 500px;
-    margin: 20px auto;
-    background: #2c2c2c; /* Fondo oscuro para el formulario */
-    padding: 20px;
+    background-color: var(--color-negro);
+    border: 2px solid var(--color-gris-claro);
     border-radius: 5px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
-label {
-    margin: 10px 0 5px; /* Espaciado superior e inferior */
-    font-weight: bold;
-    color: #0056b3; /* Azul para las etiquetas */
-    display: block; /* Asegura que el label ocupe todo el ancho */
+.hora-item input[type="radio"]:checked + label {
+    background-color: var(--color-dorado);
+    color: var(--color-negro);
+    border-color: var(--color-dorado);
+    font-weight: 600;
 }
 
-input, select, textarea {
-    width: calc(100% - 24px); /* Asegura que los elementos ocupen todo el ancho menos el padding */
-    padding: 12px; /* Espaciado interno */
-    margin-bottom: 15px; /* Espaciado inferior */
-    border: 2px solid #0056b3; /* Borde azul */
-    border-radius: 5px; /* Bordes redondeados */
-    transition: border-color 0.3s, box-shadow 0.3s; /* Transición para el borde y sombra */
+.hora-item label:hover {
+    border-color: var(--color-dorado);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
 }
 
-#mensaje {
-    background-color: #d4edda; /* Fondo verde claro */
-    color: #155724; /* Texto verde oscuro */
-    border: 1px solid #c3e6cb; /* Borde verde */
-    padding: 10px 15px; /* Ajustar el padding para que sea más estético */
-    border-radius: 5px;
-    margin-top: 20px;
-    display: inline-block; /* Cambiar a inline-block para ajustar el ancho al contenido */
-    animation: fadeIn 0.5s ease-in-out; /* Animación de entrada */
+.notificacion {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transform: translateY(150%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
 }
 
-@keyframes fadeIn {
-    from {
-        opacity: 0; /* Comienza invisible */
-        transform: translateY(-10px); /* Mueve hacia arriba */
+.notificacion.mostrar {
+    transform: translateY(0);
+}
+
+.notificacion-contenido {
+    display: flex;
+    align-items: center;
+    padding: 16px 24px;
+    gap: 12px;
+}
+
+.notificacion-contenido i.fa-check-circle {
+    color: #4CAF50;
+    font-size: 24px;
+}
+
+.notificacion-contenido p {
+    margin: 0;
+    color: #333;
+    font-size: 16px;
+}
+
+.boton-cerrar {
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    padding: 4px;
+    margin-left: 12px;
+}
+
+.boton-cerrar:hover {
+    color: #333;
+}
+
+@media (max-width: 768px) {
+    .notificacion {
+        top: auto;
+        bottom: 20px;
+        right: -100%;
+        width: calc(100% - 40px);
+        margin: 0 20px;
     }
-    to {
-        opacity: 1; /* Termina visible */
-        transform: translateY(0); /* Regresa a la posición original */
+
+    .notificacion.mostrar {
+        right: 0;
     }
-}
 
-.btn {
-    display: inline-block;
-    margin-top: 20px;
-    padding: 10px 15px;
-    background-color: #f44336; /* Fondo rojo */
-    color: white;
-    text-decoration: none;
-    border-radius: 5px;
-    transition: background-color 0.3s; /* Transición para el color de fondo */
-}
-
-.btn:hover {
-    background-color: #0056b3; /* Fondo azul al pasar el mouse */
-}
-
-.btn.volver {
-    background-color: #f44336; /* Botón rojo para volver */
-    margin-top: 30px; /* Aumentar el margen superior para despegarlo del borde */
-    margin-bottom: 20px; /* Agregar margen inferior para separarlo del borde de la página */
-    margin-left: 10px; /* Agregar margen izquierdo para separarlo del borde izquierdo */
-}
-
-header h2 {
-    margin-left: 10px; /* Agregar margen izquierdo para el encabezado */
-}
-
-.cita-section h2 {
-    margin-left: 10px; /* Agregar margen izquierdo para el encabezado */
+    .notificacion-contenido {
+        min-width: auto;
+    }
 } 

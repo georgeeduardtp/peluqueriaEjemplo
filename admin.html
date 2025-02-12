@@ -3,55 +3,236 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Panel de Administrador</title>
+    <title>Panel de Administración - Barbería Elegante</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="admin.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <header>
+        <img src="https://thebiz.me/wp-content/uploads/2020/11/hair-salon-logo-ideas-6.24.22-PM.png" alt="Logo Barbería" class="header-logo">
+        <div class="header-content">
+            <h1>Panel de Administración</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Volver a la Web</a></li>
+                    <li><a href="#" onclick="cerrarSesion()">Cerrar Sesión</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="admin-panel">
+        <div class="admin-container">
+            <div class="filtros">
+                <h3>Filtrar Citas</h3>
+                <div class="filtros-grupo">
+                    <div class="filtro-item">
+                        <label for="filtroFecha">Fecha:</label>
+                        <input type="date" id="filtroFecha">
+                    </div>
+                    <div class="filtro-item">
+                        <label for="filtroEstado">Estado:</label>
+                        <select id="filtroEstado">
+                            <option value="todos">Todos</option>
+                            <option value="pendiente">Pendientes</option>
+                            <option value="completada">Completadas</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="lista-citas">
+                <!-- Las citas se cargarán aquí dinámicamente -->
+            </div>
+        </div>
+    </section>
+
+    <div class="notificacion" id="notificacion">
+        <div class="notificacion-contenido">
+            <i class="fas fa-check-circle"></i>
+            <p id="mensaje-notificacion"></p>
+            <button class="boton-cerrar" onclick="cerrarNotificacion()">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+    <script src="firebase-config.js"></script>
+
     <script>
-        window.onload = function() {
-            cargarReservas();
-        };
+        const listaCitas = document.querySelector('.lista-citas');
+        const filtroFecha = document.getElementById('filtroFecha');
+        const filtroEstado = document.getElementById('filtroEstado');
+        const notificacion = document.getElementById('notificacion');
+        const mensajeNotificacion = document.getElementById('mensaje-notificacion');
+        const db = firebase.firestore();
 
-        function cargarReservas() {
-            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-            const contenedor = document.querySelector('.reservas-container');
-            contenedor.innerHTML = ''; // Limpiar el contenido previo
+        // Verificar autenticación
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
 
-            reservas.forEach((reserva, index) => {
-                const tarjeta = document.createElement('div');
-                tarjeta.className = 'tarjeta';
-                tarjeta.innerHTML = `
-                    <h3>${reserva.nombre}</h3>
-                    <p>Fecha: ${reserva.fecha}</p>
-                    <p>Hora: ${reserva.hora}</p>
-                    <p>Correo: ${reserva.correo}</p>
-                    <p>Móvil: ${reserva.movil}</p>
-                    <button onclick="eliminarReserva(${index})" class="btn eliminar">Eliminar</button>
-                `;
-                contenedor.appendChild(tarjeta);
+        // Cargar citas
+        function cargarCitas() {
+            const fecha = filtroFecha.value;
+            const estado = filtroEstado.value;
+            
+            // Creamos la consulta base
+            let query = db.collection('citas');
+
+            // Aplicamos los filtros
+            if (fecha) {
+                query = query.where('fecha', '==', fecha);
+            }
+
+            if (estado !== 'todos') {
+                query = query.where('estado', '==', estado);
+            }
+
+            // Ordenamos solo por fecha para evitar problemas con el índice
+            query = query.orderBy('fecha', 'asc');
+
+            // Escuchamos los cambios en tiempo real
+            query.onSnapshot((snapshot) => {
+                listaCitas.innerHTML = '';
+                if (snapshot.empty) {
+                    let mensaje = 'No hay citas que mostrar';
+                    if (fecha) {
+                        const fechaFormateada = new Date(fecha).toLocaleDateString('es-ES', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric'
+                        });
+                        if (estado === 'pendiente') {
+                            mensaje = `No hay citas pendientes para el día ${fechaFormateada}`;
+                        } else if (estado === 'completada') {
+                            mensaje = `No hay citas completadas para el día ${fechaFormateada}`;
+                        } else {
+                            mensaje = `No hay citas para el día ${fechaFormateada}`;
+                        }
+                    } else if (estado === 'pendiente') {
+                        mensaje = 'No hay citas pendientes';
+                    } else if (estado === 'completada') {
+                        mensaje = 'No hay citas completadas';
+                    }
+                    listaCitas.innerHTML = `<p class="no-citas">${mensaje}</p>`;
+                    return;
+                }
+
+                // Ordenamos las citas por fecha y hora
+                const citas = [];
+                snapshot.forEach((doc) => {
+                    citas.push({ id: doc.id, ...doc.data() });
+                });
+                
+                // Ordenamos primero por fecha y luego por hora
+                citas.sort((a, b) => {
+                    if (a.fecha === b.fecha) {
+                        return a.hora.localeCompare(b.hora);
+                    }
+                    return b.fecha.localeCompare(a.fecha); // Orden descendente por fecha
+                });
+
+                citas.forEach((cita) => {
+                    const citaElement = document.createElement('div');
+                    citaElement.className = `cita-card ${cita.estado || 'pendiente'}`;
+                    citaElement.innerHTML = `
+                        <div class="cita-info">
+                            <div class="cita-header">
+                                <h4>${cita.nombre}</h4>
+                                ${cita.estado === 'completada' ? '<i class="fas fa-check-circle estado-completado"></i>' : ''}
+                            </div>
+                            <p><i class="far fa-calendar"></i> ${cita.fecha} - ${cita.hora}</p>
+                            <p><i class="fas fa-cut"></i> ${cita.servicio}</p>
+                            <p><i class="fas fa-phone"></i> ${cita.telefono}</p>
+                            <p><i class="far fa-envelope"></i> ${cita.email}</p>
+                            ${cita.notas ? `<p><i class="fas fa-sticky-note"></i> ${cita.notas}</p>` : ''}
+                            <p class="estado-texto">
+                                <i class="fas ${cita.estado === 'completada' ? 'fa-check-circle' : 'fa-clock'}"></i>
+                                Estado: ${cita.estado === 'completada' ? 'Completada' : 'Pendiente'}
+                            </p>
+                        </div>
+                        <div class="cita-acciones">
+                            ${cita.estado !== 'completada' ? 
+                                `<button onclick="completarCita('${cita.id}')" class="boton-completar">
+                                    <i class="fas fa-check"></i> Completar
+                                </button>` : ''
+                            }
+                            <button onclick="eliminarCita('${cita.id}')" class="boton-eliminar">
+                                <i class="fas fa-trash"></i> Eliminar
+                            </button>
+                        </div>
+                    `;
+                    listaCitas.appendChild(citaElement);
+                });
+            }, (error) => {
+                console.error("Error al cargar las citas:", error);
+                mostrarNotificacion('Error al cargar las citas');
             });
         }
 
-        function eliminarReserva(index) {
-            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
-            reservas.splice(index, 1); // Eliminar la reserva en el índice especificado
-            localStorage.setItem('reservas', JSON.stringify(reservas)); // Guardar las reservas actualizadas
-            cargarReservas(); // Recargar las reservas
+        async function completarCita(id) {
+            try {
+                await db.collection('citas').doc(id).update({
+                    estado: 'completada'
+                });
+                mostrarNotificacion('Cita marcada como completada');
+            } catch (error) {
+                console.error('Error:', error);
+                mostrarNotificacion('Error al actualizar la cita');
+            }
         }
+
+        async function eliminarCita(id) {
+            if (confirm('¿Estás seguro de que deseas eliminar esta cita?')) {
+                try {
+                    await db.collection('citas').doc(id).delete();
+                    mostrarNotificacion('Cita eliminada correctamente');
+                } catch (error) {
+                    console.error('Error:', error);
+                    mostrarNotificacion('Error al eliminar la cita');
+                }
+            }
+        }
+
+        function cerrarSesion() {
+            firebase.auth().signOut().then(() => {
+                window.location.href = 'login.html';
+            }).catch((error) => {
+                console.error('Error al cerrar sesión:', error);
+            });
+        }
+
+        function mostrarNotificacion(mensaje) {
+            mensajeNotificacion.textContent = mensaje;
+            notificacion.classList.add('mostrar');
+            setTimeout(() => {
+                cerrarNotificacion();
+            }, 5000);
+        }
+
+        function cerrarNotificacion() {
+            notificacion.classList.remove('mostrar');
+        }
+
+        // Event listeners
+        filtroFecha.addEventListener('change', function() {
+            // Resetear el filtro de estado a "todos"
+            filtroEstado.value = 'todos';
+            cargarCitas();
+        });
+        filtroEstado.addEventListener('change', cargarCitas);
+
+        // Cargar citas iniciales
+        cargarCitas();
     </script>
-</head>
-<body>
-    <header style="background-image: url('https://wallpaperaccess.com/full/1371364.jpg'); background-size: cover; background-position: center; position: relative; text-align: center; padding: 20px 0;">
-        <div style="background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
-        <h1 style="color: white; z-index: 1;">Administración</h1>
-    </header>
-
-    <div style="height: 4px; background-color: #c70000; margin: 0;"></div>
-
-    <section class="reservas-section">
-        <h2>Reservas</h2>
-        <div class="reservas-container">
-            <!-- Las reservas se cargarán aquí dinámicamente como tarjetas -->
-        </div>
-        <a href="cita.html" class="btn volver">Volver a Reservas</a>
-    </section>
 </body>
 </html> 

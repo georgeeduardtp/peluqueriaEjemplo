@@ -3,41 +3,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Peluquería</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Barbería Elegante</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-    <header style="background-image: url('https://wallpaperaccess.com/full/1371364.jpg'); background-size: cover; background-position: center; position: relative; text-align: center; padding: 20px 0;">
-        <div style="background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0; left: 0; right: 0; bottom: 0; z-index: 0;"></div>
-        <img class="logo" src="https://cdn.pixabay.com/photo/2020/09/06/22/58/barbershop-5550320_960_720.png" alt="Logotipo de la Peluquería" style="position: relative; z-index: 1;" />
-        <h1 style="color: white; z-index: 1; position: relative;">Bienvenidos a Nuestra Peluquería</h1>
-        <p style="color: white; z-index: 1; position: relative;">Ofrecemos los mejores servicios para tu cabello.</p>
-        <a href="servicios.html" class="btn" style="z-index: 1; position: relative;">Pedir Cita</a>
+    <header>
+        <img src="https://thebiz.me/wp-content/uploads/2020/11/hair-salon-logo-ideas-6.24.22-PM.png" alt="Logo Barbería" class="header-logo">
+        <div class="header-content">
+            <h1>Barbería Elegante</h1>
+            <nav>
+                <ul>
+                    <li><a href="#inicio">Inicio</a></li>
+                    <li><a href="#servicios">Servicios</a></li>
+                    <li><a href="#nosotros">Nosotros</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                    <li><a href="cita.html" class="boton-cita">Reservar</a></li>
+                </ul>
+            </nav>
+        </div>
     </header>
 
-    <section class="index">
-        <h2>Servicios Ofrecidos</h2>
-        <div class="tarjetas">
-            <div class="tarjeta">
-                <img src="https://img.icons8.com/ios-filled/50/c70000/haircut.png" alt="Corte Simple" class="icono-servicio">
-                <h3>Corte Simple</h3>
-                <p>Un corte de cabello clásico y elegante.</p>
-                <p class="precio">$15</p>
+    <section id="inicio">
+        <div class="background-image"></div>
+        <div class="inicio-content">
+            <h2>Tu Estilo, Nuestra Pasión</h2>
+            <p>Descubre la experiencia única de una barbería que combina las técnicas tradicionales con el estilo moderno. Nuestro equipo de expertos barberos está aquí para ayudarte a lograr el look perfecto.</p>
+            <a href="cita.html" class="boton-dorado">Reserva tu Cita</a>
+        </div>
+    </section>
+
+    <section id="servicios">
+        <h2 class="titulo-seccion">Nuestros Servicios</h2>
+        <div class="servicios-container">
+            <div class="servicio">
+                <div class="imagen-container">
+                    <i class="fas fa-cut icono-servicio"></i>
+                </div>
+                <div class="servicio-info">
+                    <h3>Corte Clásico</h3>
+                    <p>Experimenta un corte de cabello tradicional con técnicas modernas. Incluye lavado, corte y peinado profesional.</p>
+                    <div class="precio">25€</div>
+                </div>
             </div>
-            <div class="tarjeta">
-                <img src="https://img.icons8.com/ios-filled/50/c70000/barber.png" alt="Corte y Barba" class="icono-servicio">
-                <h3>Corte y Barba</h3>
-                <p>Incluye corte de cabello y arreglo de barba.</p>
-                <p class="precio">$20</p>
+
+            <div class="servicio">
+                <div class="imagen-container">
+                    <i class="fas fa-user-tie icono-servicio"></i>
+                </div>
+                <div class="servicio-info">
+                    <h3>Arreglo de Barba Premium</h3>
+                    <p>Servicio completo de barba que incluye toalla caliente, aceites esenciales y perfilado con navaja tradicional.</p>
+                    <div class="precio">20€</div>
+                </div>
             </div>
-            <div class="tarjeta">
-                <img src="https://img.icons8.com/ios-filled/50/c70000/hair-dryer.png" alt="Tratamientos Capilares" class="icono-servicio">
-                <h3>Tratamientos Capilares</h3>
-                <p>Tratamientos para revitalizar tu cabello.</p>
-                <p class="precio">$30</p>
+
+            <div class="servicio">
+                <div class="imagen-container">
+                    <i class="fas fa-shower icono-servicio"></i>
+                </div>
+                <div class="servicio-info">
+                    <h3>Afeitado Tradicional</h3>
+                    <p>Afeitado clásico con navaja, incluye preparación con toalla caliente, espuma premium y masaje facial.</p>
+                    <div class="precio">30€</div>
+                </div>
+            </div>
+
+            <div class="servicio">
+                <div class="imagen-container">
+                    <i class="fas fa-star icono-servicio"></i>
+                </div>
+                <div class="servicio-info">
+                    <h3>Experiencia Completa</h3>
+                    <p>El paquete definitivo que incluye corte de pelo, arreglo de barba y tratamiento facial revitalizante.</p>
+                    <div class="precio">45€</div>
+                </div>
             </div>
         </div>
     </section>
-    <!-- Más contenido aquí -->
+
+    <footer>
+        <p>Contacto: info@barberia-elegante.com | Tel: 123-456-789</p>
+        <p>Dirección: Calle Principal 123, Ciudad</p>
+    </footer>
+
+    <script>
+        // Efecto parallax sutil para la sección de inicio
+        window.addEventListener('scroll', function() {
+            const inicio = document.querySelector('#inicio .background-image');
+            const scrolled = window.pageYOffset;
+            if (inicio) {
+                inicio.style.transform = `translateY(${scrolled * 0.15}px)`;
+            }
+        });
+
+        // Código existente para el parallax de servicios
+        function handleParallax() {
+            const servicios = document.getElementById('servicios');
+            const rect = servicios.getBoundingClientRect();
+            
+            if (rect.top < window.innerHeight && rect.bottom > 0) {
+                const scrollProgress = (window.innerHeight - rect.top) / (window.innerHeight + rect.height);
+                const moveX = -50 + (scrollProgress * 50);
+                servicios.style.setProperty('--moveX', `${moveX}%`);
+                servicios.style.setProperty('--opacity', 0.1 + (scrollProgress * 0.1));
+            }
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            #servicios::before {
+                transform: rotate(15deg) translateX(var(--moveX, -50%));
+                opacity: var(--opacity, 0.1);
+            }
+        `;
+        document.head.appendChild(style);
+
+        window.addEventListener('scroll', handleParallax);
+        window.addEventListener('resize', handleParallax);
+        handleParallax();
+    </script>
 </body>
 </html>
