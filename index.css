@@ -1,0 +1,116 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0d1117; /* Fondo oscuro similar a GitHub */
+    color: #c9d1d9; /* Texto claro para mejor contraste */
+}
+
+header {
+    background-color: #161b22; /* Fondo del encabezado oscuro */
+    text-align: center;
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra suave */
+}
+
+header h1 {
+    color: #c70000; /* Color rojo para el título */
+    font-size: 2.5em; /* Tamaño del texto */
+    margin: 0; /* Eliminar margen */
+}
+
+header p {
+    font-size: 1.1em; /* Tamaño del texto del párrafo */
+    margin: 10px 0; /* Espaciado superior e inferior */
+}
+
+header .btn {
+    background-color: #2f80ed; /* Azul para el botón */
+    color: white; /* Texto en blanco */
+    padding: 10px 15px; /* Espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    text-decoration: none; /* Sin subrayado */
+    transition: background-color 0.3s; /* Transición suave */
+}
+
+header .btn:hover {
+    background-color: #1c6bb8; /* Azul más oscuro al pasar el mouse */
+}
+
+.index {
+    padding: 20px; /* Espaciado interno */
+}
+
+.index h2 {
+    text-align: center; /* Centrar el texto horizontalmente */
+    margin-bottom: 20px; /* Espaciado inferior */
+    font-size: 2em; /* Tamaño del texto */
+    color: #c70000; /* Color rojo para el subtítulo */
+}
+
+.tarjetas {
+    display: flex;
+    justify-content: center; /* Centra las tarjetas horizontalmente */
+    flex-wrap: wrap; /* Permite que las tarjetas se envuelvan en varias filas */
+    margin: 20px 0; /* Espaciado superior e inferior */
+}
+
+.tarjeta {
+    background: #161b22; /* Fondo oscuro para las tarjetas */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* Sombra suave */
+    margin: 15px; /* Espaciado entre tarjetas */
+    padding: 20px;
+    width: 250px; /* Ancho de las tarjetas */
+    transition: transform 0.3s, box-shadow 0.3s; /* Transición para la animación */
+}
+
+.tarjeta:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra más pronunciada al pasar el mouse */
+}
+
+.icono-servicio {
+    width: 50px; /* Tamaño del icono */
+    height: auto; /* Mantener la proporción del icono */
+}
+
+.precio {
+    color: #c70000; /* Color rojo para el precio */
+    font-weight: bold; /* Hacer el texto más grueso */
+}
+
+.logo {
+    width: 100px; /* Tamaño del logo */
+    height: auto; /* Mantener la proporción del logo */
+}
+
+.btn {
+    display: inline-block; /* Asegura que el botón se comporte como un bloque en línea */
+    padding: 10px 15px; /* Espaciado interno */
+    background-color: #c70000; /* Color de fondo rojo */
+    color: white; /* Texto en blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.5s ease, box-shadow 0.5s ease; /* Transición más suave */
+    text-align: center; /* Centrar el texto del botón */
+    text-decoration: none; /* Quitar subrayado */
+    margin: 10px auto; /* Centrar el botón y agregar espaciado */
+    width: auto; /* Ancho automático para un tamaño normal */
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.5), 0 0 20px rgba(255, 255, 255, 0.5); /* Efecto de reluciente */
+    animation: glow 1s infinite alternate; /* Animación de brillo */
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(255, 255, 255, 0.5), 0 0 10px rgba(255, 255, 255, 0.5);
+    }
+    100% {
+        box-shadow: 0 0 20px rgba(255, 255, 255, 1), 0 0 30px rgba(255, 255, 255, 1);
+    }
+} 

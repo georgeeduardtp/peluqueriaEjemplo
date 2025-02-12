@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cita</title>
+    <link rel="stylesheet" href="cita.css">
+    <script>
+        function guardarReserva(event) {
+            event.preventDefault(); // Evitar el envío del formulario
+            const nombre = document.getElementById('nombre').value;
+            const fecha = document.getElementById('fecha').value;
+            const hora = document.querySelector('input[name="hora"]:checked').value; // Obtener la hora seleccionada
+            const correo = document.getElementById('correo').value;
+            const movil = document.getElementById('movil').value;
+
+            // Crear un objeto de reserva
+            const reserva = { nombre, fecha, hora, correo, movil };
+
+            // Obtener reservas existentes del localStorage
+            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+            reservas.push(reserva); // Agregar la nueva reserva
+
+            // Guardar las reservas actualizadas en el localStorage
+            localStorage.setItem('reservas', JSON.stringify(reservas));
+
+            // Mostrar mensaje de confirmación
+            const mensaje = document.getElementById('mensaje');
+            mensaje.innerText = 'Cita confirmada. ¡Gracias!';
+            mensaje.style.display = 'block'; // Mostrar el mensaje
+
+            // Actualizar el estado de las horas ocupadas
+            actualizarHorasOcupadas(fecha);
+        }
+
+        function mostrarHoraSeleccionada() {
+            const horaSeleccionada = document.querySelector('input[name="hora"]:checked');
+            const horaDisplay = document.getElementById('hora-seleccionada');
+            const botones = document.querySelectorAll('.hora-boton');
+
+            // Resetear el color de todos los botones
+            botones.forEach(boton => {
+                boton.style.backgroundColor = '#2f80ed'; // Color original
+                boton.style.border = 'none'; // Sin borde
+            });
+
+            if (horaSeleccionada) {
+                horaDisplay.innerText = `Hora seleccionada: ${horaSeleccionada.value}`;
+                // Cambiar el color del botón seleccionado
+                const botonSeleccionado = horaSeleccionada.parentElement;
+                botonSeleccionado.style.backgroundColor = '#1c6bb8'; // Color al seleccionar
+            } else {
+                horaDisplay.innerText = 'Hora seleccionada: Ninguna';
+            }
+        }
+
+        function actualizarHorasOcupadas(fecha) {
+            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+            const horasOcupadas = reservas.filter(reserva => reserva.fecha === fecha).map(reserva => reserva.hora);
+
+            const botones = document.querySelectorAll('.hora-boton');
+            botones.forEach(boton => {
+                const hora = boton.querySelector('input').value;
+                if (horasOcupadas.includes(hora)) {
+                    boton.style.backgroundColor = 'white'; // Fondo blanco
+                    boton.style.border = '2px solid blue'; // Borde azul
+                    boton.style.color = 'gray'; // Cambiar el color del texto a gris
+                    boton.querySelector('input').disabled = true; // Deshabilitar el botón
+                }
+            });
+        }
+
+        function cambiarEstiloCampo(campo, label) {
+            campo.classList.add('error'); // Agregar clase de error al campo
+            label.classList.add('error'); // Agregar clase de error al label
+        }
+
+        function restaurarEstiloCampo(campo, label) {
+            campo.classList.remove('error'); // Quitar clase de error al campo
+            label.classList.remove('error'); // Quitar clase de error al label
+        }
+
+        // Función para inicializar el estado de las horas ocupadas al cargar la página
+        window.onload = function() {
+            const fechaInput = document.getElementById('fecha');
+            fechaInput.addEventListener('change', function() {
+                actualizarHorasOcupadas(this.value);
+            });
+        };
+    </script>
+    <style>
+        .hora-selector {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 10px 0;
+        }
+        .hora-boton {
+            background-color: #2f80ed; /* Color de fondo del botón */
+            color: white; /* Color del texto */
+            border: none; /* Sin borde */
+            border-radius: 5px; /* Bordes redondeados */
+            padding: 10px 15px; /* Espaciado interno */
+            margin: 5px; /* Espaciado entre botones */
+            cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+            transition: background-color 0.3s; /* Transición suave */
+        }
+        .hora-boton:hover {
+            background-color: #1c6bb8; /* Color más oscuro al pasar el mouse */
+        }
+        .hora-boton input {
+            display: none; /* Ocultar el input radio */
+        }
+        label {
+            color: #2f80ed; /* Color azul para los labels */
+            font-weight: bold; /* Hacer el texto más grueso */
+        }
+        input.error, textarea.error {
+            border: 2px solid red; /* Borde rojo para campos con error */
+        }
+        label.error {
+            color: red; /* Color rojo para labels con error */
+        }
+    </style>
+</head>
+<body>
+    <header style="background-image: url('https://wallpaperaccess.com/full/1371364.jpg'); background-size: cover; background-position: center; position: relative; text-align: center; padding: 20px 0;">
+        <div style="background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+        <img class="logo" src="https://cdn.pixabay.com/photo/2020/09/06/22/58/barbershop-5550320_960_720.png" alt="Logotipo de la Peluquería" style="position: relative; z-index: 1; width: 80px; height: auto;" />
+        <h1 style="color: white; z-index: 1; position: relative;">Bienvenidos a Nuestra Peluquería</h1>
+        <p style="color: white; z-index: 1; position: relative;">Ofrecemos los mejores servicios para tu cabello.</p>
+        
+    </header>
+
+    <div style="height: 4px; background-color: #c70000; margin: 0;"></div>
+
+    <section class="cita-section">
+        <h2 style="margin-left: 10px;">Formulario de Cita</h2>
+        <form onsubmit="guardarReserva(event)" class="cita-form">
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required onclick="restaurarEstiloCampo(this, this.previousElementSibling)">
+            
+            <label for="hora">Hora:</label>
+            <div class="hora-selector">
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="09:00" required onclick="mostrarHoraSeleccionada()"> 09:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="09:30" onclick="mostrarHoraSeleccionada()"> 09:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="10:00" onclick="mostrarHoraSeleccionada()"> 10:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="10:30" onclick="mostrarHoraSeleccionada()"> 10:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="11:00" onclick="mostrarHoraSeleccionada()"> 11:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="11:30" onclick="mostrarHoraSeleccionada()"> 11:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="12:00" onclick="mostrarHoraSeleccionada()"> 12:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="12:30" onclick="mostrarHoraSeleccionada()"> 12:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="13:00" onclick="mostrarHoraSeleccionada()"> 13:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="13:30" onclick="mostrarHoraSeleccionada()"> 13:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="14:00" onclick="mostrarHoraSeleccionada()"> 14:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="14:30" onclick="mostrarHoraSeleccionada()"> 14:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="15:00" onclick="mostrarHoraSeleccionada()"> 15:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="15:30" onclick="mostrarHoraSeleccionada()"> 15:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="16:00" onclick="mostrarHoraSeleccionada()"> 16:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="16:30" onclick="mostrarHoraSeleccionada()"> 16:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="17:00" onclick="mostrarHoraSeleccionada()"> 17:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="17:30" onclick="mostrarHoraSeleccionada()"> 17:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="18:00" onclick="mostrarHoraSeleccionada()"> 18:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="18:30" onclick="mostrarHoraSeleccionada()"> 18:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="19:00" onclick="mostrarHoraSeleccionada()"> 19:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="19:30" onclick="mostrarHoraSeleccionada()"> 19:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="20:00" onclick="mostrarHoraSeleccionada()"> 20:00
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="20:30" onclick="mostrarHoraSeleccionada()"> 20:30
+                </label>
+                <label class="hora-boton">
+                    <input type="radio" name="hora" value="21:00" onclick="mostrarHoraSeleccionada()"> 21:00
+                </label>
+            </div>
+            <p id="hora-seleccionada" style="color: white; margin-top: 10px;">Hora seleccionada: Ninguna</p> <!-- Mostrar la hora seleccionada -->
+            
+            <h2>Información Personal</h2>
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required onclick="restaurarEstiloCampo(this, this.previousElementSibling)">
+            
+            <label for="correo">Correo:</label>
+            <input type="email" id="correo" name="correo" required onclick="restaurarEstiloCampo(this, this.previousElementSibling)">
+            
+            <label for="movil">Móvil:</label>
+            <input type="tel" id="movil" name="movil" required onclick="restaurarEstiloCampo(this, this.previousElementSibling)">
+            
+            <label for="comentario">Comentario (opcional):</label>
+            <textarea id="comentario" name="comentario"></textarea>
+            
+            <button type="submit" class="btn">Confirmar Cita</button>
+        </form>
+        <p id="mensaje" style="display:none; color: green;"></p> <!-- Mensaje de confirmación -->
+        <a href="index.html" class="btn volver">Volver Atrás</a>
+    </section>
+</body>
+</html>

@@ -1,0 +1,83 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #0d1117; /* Fondo oscuro para la página */
+    color: #c9d1d9; /* Texto claro para mejor contraste */
+}
+
+.reservas-section {
+    max-width: 1200px; /* Ancho máximo de la sección */
+    margin: 20px auto; /* Margen automático para centrar horizontalmente */
+    background: white;
+    padding: 20px;
+    border-radius: 5px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.reservas-container {
+    display: flex;
+    flex-wrap: wrap; /* Permitir que las tarjetas se envuelvan */
+    justify-content: space-between; /* Alinear las tarjetas con espacio entre ellas */
+}
+
+.tarjeta {
+    background: white; /* Fondo blanco para la tarjeta */
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    padding: 15px;
+    margin: 5px; /* Espaciado entre tarjetas */
+    width: calc(23% - 20px); /* Ancho de la tarjeta para que quepan 4 por fila */
+    display: flex; /* Usar flexbox para el contenido de la tarjeta */
+    flex-direction: column; /* Disposición vertical para el contenido */
+    justify-content: space-between; /* Espacio entre el contenido */
+    align-items: center; /* Centrar verticalmente el contenido */
+    transition: transform 0.3s; /* Transición para el hover */
+}
+
+.tarjeta:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
+}
+
+.tarjeta h3 {
+    margin: 0; /* Eliminar margen para un mejor alineamiento */
+    font-size: 1.5em; /* Aumentar el tamaño del texto del nombre */
+}
+
+.tarjeta p {
+    margin: 5px 0; /* Espaciado entre párrafos */
+    text-align: center; /* Centrar el texto dentro de la tarjeta */
+}
+
+.btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #f44336; /* Fondo rojo */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s; /* Transición para el color de fondo */
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Fondo azul al pasar el mouse */
+}
+
+.btn.volver {
+    background-color: #f44336; /* Botón rojo para volver */
+    margin-top: 20px; /* Espaciado superior para el botón de volver */
+}
+
+header {
+    background-color: #161b22; /* Fondo del encabezado oscuro */
+    text-align: center;
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra suave */
+}
+
+header h1 {
+    color: #c70000; /* Color rojo para el título */
+    font-size: 2.5em; /* Tamaño del texto */
+    margin: 0; /* Eliminar margen */
+} 

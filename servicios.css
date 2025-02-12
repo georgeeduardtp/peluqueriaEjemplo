@@ -1,0 +1,130 @@
+body {
+    font-family: 'Roboto', sans-serif; /* Cambiar a la nueva fuente */
+    margin: 0;
+    padding: 0;
+    background-color: #0d1117; /* Fondo oscuro para la página */
+    color: #c9d1d9; /* Texto claro para mejor contraste */
+}
+
+.servicios {
+    background-color: #161b22; /* Establecer fondo oscuro para la sección */
+    padding: 20px; /* Añade un poco de espacio alrededor del contenido */
+    color: #c9d1d9; /* Cambia el color del texto para mejor contraste */
+    position: relative; /* Para el uso de pseudo-elemento */
+}
+
+.servicios::before {
+    content: ""; /* Puedes eliminar este bloque si no lo necesitas */
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    /* background-color: rgba(0, 0, 0, 0.5); */ /* Elimina o comenta esta línea */
+    z-index: 1; /* Asegura que el fondo esté detrás del contenido */
+}
+
+.servicios h2 {
+    text-align: center; /* Centrar el texto horizontalmente */
+    margin-bottom: 20px; /* Espaciado inferior */
+    font-size: 2.5em; /* Aumentar el tamaño del texto */
+    z-index: 3; /* Asegura que el h2 esté por encima de los elementos de la lista */
+    position: relative; /* Para que el z-index funcione */
+}
+
+header {
+    background-color: #161b22; /* Fondo del encabezado oscuro */
+    text-align: center;
+    padding: 20px; /* Espaciado interno */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3); /* Sombra suave */
+}
+
+header::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5); /* Ajustar la opacidad si es necesario */
+    z-index: 1; /* Asegura que el fondo oscuro esté detrás del texto */
+}
+
+header h1 {
+    color: #c70000; /* Color rojo para el título */
+    font-size: 2.5em; /* Tamaño del texto */
+    margin: 0; /* Eliminar margen */
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.9); /* Aumentar la sombra para mayor contraste */
+    position: relative; /* Para que el z-index funcione */
+    z-index: 2; /* Asegura que el h1 esté por encima del fondo oscuro */
+}
+
+header h2 {
+    color: #c70000; /* Color rojo para el subtítulo */
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex; /* Usar flexbox para centrar los elementos */
+    flex-direction: column; /* Alinear los elementos en columna */
+    align-items: center; /* Centrar los elementos horizontalmente */
+}
+
+ul li {
+    background: #2c2c2c; /* Fondo oscuro para los elementos de la lista */
+    color: #c9d1d9; /* Texto claro */
+    padding: 15px;
+    border-radius: 10px; /* Bordes redondeados */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2); /* Sombra más suave */
+    margin-bottom: 15px; /* Espaciado entre elementos de la lista */
+    width: 300px; /* Ancho fijo para los elementos de la lista */
+    text-align: center; /* Centrar el texto dentro del li */
+    position: relative; /* Para que el z-index funcione */
+    z-index: 2; /* Asegura que los elementos de la lista estén por encima del fondo */
+    transition: transform 0.3s; /* Transición para el hover */
+}
+
+ul li:hover {
+    transform: scale(1.05); /* Aumenta el tamaño al pasar el mouse */
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada al pasar el mouse */
+}
+
+.btn {
+    display: inline-block; /* Asegura que el botón se comporte como un bloque en línea */
+    padding: 10px 15px; /* Espaciado interno */
+    background-color: #c70000; /* Color de fondo rojo */
+    color: white; /* Texto en blanco */
+    border: none; /* Sin borde */
+    border-radius: 5px; /* Bordes redondeados */
+    cursor: pointer; /* Cambia el cursor al pasar sobre el botón */
+    transition: background-color 0.5s ease, box-shadow 0.5s ease; /* Transición más suave */
+    text-align: center; /* Centrar el texto del botón */
+    text-decoration: none; /* Quitar subrayado */
+    margin: 10px auto; /* Centrar el botón y agregar espaciado */
+    width: auto; /* Ancho automático para un tamaño normal */
+}
+
+.btn:hover {
+    background-color: #0056b3; /* Azul más oscuro al pasar el mouse */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5); /* Efecto de sombra al pasar el mouse */
+}
+
+@keyframes glow {
+    0% {
+        box-shadow: none; /* Sin efecto de brillo */
+    }
+    100% {
+        box-shadow: none; /* Sin efecto de brillo */
+    }
+}
+
+.btn:hover + .precio {
+    color: blue; /* Cambiar el color del precio a azul al pasar el mouse sobre el botón */
+}
+
+.precio {
+    color: #c70000; /* Cambiar el color del precio a rojo */
+    font-weight: bold; /* Hacer el texto más grueso */
+    font-size: 1.2em; /* Aumentar el tamaño del texto si es necesario */
+} 

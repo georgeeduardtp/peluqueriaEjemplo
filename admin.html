@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administrador</title>
+    <link rel="stylesheet" href="admin.css">
+    <script>
+        window.onload = function() {
+            cargarReservas();
+        };
+
+        function cargarReservas() {
+            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+            const contenedor = document.querySelector('.reservas-container');
+            contenedor.innerHTML = ''; // Limpiar el contenido previo
+
+            reservas.forEach((reserva, index) => {
+                const tarjeta = document.createElement('div');
+                tarjeta.className = 'tarjeta';
+                tarjeta.innerHTML = `
+                    <h3>${reserva.nombre}</h3>
+                    <p>Fecha: ${reserva.fecha}</p>
+                    <p>Hora: ${reserva.hora}</p>
+                    <p>Correo: ${reserva.correo}</p>
+                    <p>Móvil: ${reserva.movil}</p>
+                    <button onclick="eliminarReserva(${index})" class="btn eliminar">Eliminar</button>
+                `;
+                contenedor.appendChild(tarjeta);
+            });
+        }
+
+        function eliminarReserva(index) {
+            const reservas = JSON.parse(localStorage.getItem('reservas')) || [];
+            reservas.splice(index, 1); // Eliminar la reserva en el índice especificado
+            localStorage.setItem('reservas', JSON.stringify(reservas)); // Guardar las reservas actualizadas
+            cargarReservas(); // Recargar las reservas
+        }
+    </script>
+</head>
+<body>
+    <header style="background-image: url('https://wallpaperaccess.com/full/1371364.jpg'); background-size: cover; background-position: center; position: relative; text-align: center; padding: 20px 0;">
+        <div style="background-color: rgba(0, 0, 0, 0.5); position: absolute; top: 0; left: 0; right: 0; bottom: 0;"></div>
+        <h1 style="color: white; z-index: 1;">Administración</h1>
+    </header>
+
+    <div style="height: 4px; background-color: #c70000; margin: 0;"></div>
+
+    <section class="reservas-section">
+        <h2>Reservas</h2>
+        <div class="reservas-container">
+            <!-- Las reservas se cargarán aquí dinámicamente como tarjetas -->
+        </div>
+        <a href="cita.html" class="btn volver">Volver a Reservas</a>
+    </section>
+</body>
+</html> 
