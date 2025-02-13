@@ -181,38 +181,123 @@
         const notificacion = document.getElementById('notificacion');
         const mensajeNotificacion = document.getElementById('mensaje-notificacion');
         const db = firebase.firestore();
+        const fechaInput = document.getElementById('fecha');
+        const horasContainer = document.querySelector('.horas-container');
+
+        // Función para verificar horas ocupadas
+        async function verificarHorasOcupadas(fecha) {
+            try {
+                console.log('Verificando horas para fecha:', fecha);
+                const citasRef = db.collection('citas');
+                const snapshot = await citasRef
+                    .where('fecha', '==', fecha)
+                    .where('estado', '!=', 'cancelada')
+                    .get();
+                
+                const horasOcupadas = new Set();
+                snapshot.forEach(doc => {
+                    const cita = doc.data();
+                    console.log('Cita encontrada:', cita);
+                    horasOcupadas.add(cita.hora);
+                });
+
+                console.log('Horas ocupadas:', Array.from(horasOcupadas));
+
+                // Habilitar/deshabilitar horas según disponibilidad
+                const horasInputs = document.querySelectorAll('.hora-item input[type="radio"]');
+                horasInputs.forEach(input => {
+                    const horaLabel = input.nextElementSibling;
+                    if (horasOcupadas.has(input.value)) {
+                        console.log('Marcando hora como ocupada:', input.value);
+                        input.disabled = true;
+                        input.checked = false;
+                        horaLabel.classList.add('ocupada');
+                    } else {
+                        input.disabled = false;
+                        horaLabel.classList.remove('ocupada');
+                    }
+                });
+            } catch (error) {
+                console.error('Error al verificar horas ocupadas:', error);
+            }
+        }
+
+        // Evento para cuando cambia la fecha
+        fechaInput.addEventListener('change', function() {
+            if (this.value) {
+                verificarHorasOcupadas(this.value);
+            }
+        });
 
         formulario.addEventListener('submit', async function(e) {
             e.preventDefault();
             
             try {
-                // Recoger los datos del formulario
                 const formData = new FormData(formulario);
+                const fecha = formData.get('fecha');
+                const hora = formData.get('hora');
+                const nombre = formData.get('nombre');
+                const telefono = formData.get('telefono');
+                const email = formData.get('email');
+                const servicio = formData.get('servicio');
+
+                // Verificar que todos los campos requeridos estén completos
+                if (!fecha || !hora || !nombre || !telefono || !email || !servicio) {
+                    mostrarNotificacion('Por favor, complete todos los campos requeridos.');
+                    return;
+                }
+
+                // Verificar nuevamente si la hora está disponible
+                const horaDisponible = await verificarHoraDisponible(fecha, hora);
+                if (!horaDisponible) {
+                    mostrarNotificacion('Lo sentimos, esta hora ya ha sido reservada. Por favor, seleccione otra hora.');
+                    verificarHorasOcupadas(fecha);
+                    return;
+                }
+
+                // Crear el objeto de datos
                 const datos = {
-                    nombre: formData.get('nombre'),
-                    telefono: formData.get('telefono'),
-                    email: formData.get('email'),
-                    fecha: formData.get('fecha'),
-                    hora: formData.get('hora'),
-                    servicio: formData.get('servicio'),
-                    notas: formData.get('notas'),
+                    nombre: nombre,
+                    telefono: telefono,
+                    email: email,
+                    fecha: fecha,
+                    hora: hora,
+                    servicio: servicio,
+                    notas: formData.get('notas') || '',
                     estado: 'pendiente',
-                    fecha_creacion: firebase.firestore.FieldValue.serverTimestamp()
+                    fecha_creacion: firebase.firestore.Timestamp.now()
                 };
 
                 // Guardar en Firebase
                 await db.collection('citas').add(datos);
                 
-                // Mostrar notificación
                 mostrarNotificacion('¡Tu cita ha sido reservada con éxito!');
-                // Limpiar formulario
                 formulario.reset();
+                verificarHorasOcupadas(fecha);
             } catch (error) {
-                console.error('Error:', error);
+                console.error('Error específico:', error);
                 mostrarNotificacion('Error al reservar la cita. Por favor, inténtalo de nuevo.');
             }
         });
 
+        // Función para verificar si una hora específica está disponible
+        async function verificarHoraDisponible(fecha, hora) {
+            try {
+                const citasRef = db.collection('citas');
+                const snapshot = await citasRef
+                    .where('fecha', '==', fecha)
+                    .where('hora', '==', hora)
+                    .where('estado', '!=', 'cancelada')
+                    .get();
+                
+                return snapshot.empty;
+            } catch (error) {
+                console.error('Error al verificar disponibilidad:', error);
+                return false;
+            }
+        }
+
+        // Función para mostrar notificación
         function mostrarNotificacion(mensaje) {
             mensajeNotificacion.textContent = mensaje;
             notificacion.classList.add('mostrar');
@@ -223,6 +308,16 @@
 
         function cerrarNotificacion() {
             notificacion.classList.remove('mostrar');
+        }
+
+        // Establecer fecha mínima como hoy
+        const hoy = new Date();
+        const fechaMinima = hoy.toISOString().split('T')[0];
+        fechaInput.min = fechaMinima;
+
+        // Verificar horas ocupadas al cargar la página si hay una fecha seleccionada
+        if (fechaInput.value) {
+            verificarHorasOcupadas(fechaInput.value);
         }
     </script>
 </body>

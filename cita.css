@@ -143,6 +143,38 @@ select option {
     box-shadow: 0 4px 15px rgba(212, 175, 55, 0.1);
 }
 
+.hora-item input[type="radio"]:disabled + label,
+.hora-item label.ocupada {
+    background-color: var(--color-dorado) !important;
+    color: var(--color-negro) !important;
+    border: none !important;
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    opacity: 0.7 !important;
+    position: relative;
+}
+
+.hora-item input[type="radio"]:disabled + label::after,
+.hora-item label.ocupada::after {
+    content: "Ocupado";
+    position: absolute;
+    top: -20px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    background-color: var(--color-negro);
+    color: var(--color-dorado);
+    padding: 2px 6px;
+    border-radius: 3px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.hora-item input[type="radio"]:disabled + label:hover::after,
+.hora-item label.ocupada:hover::after {
+    opacity: 1;
+}
+
 .notificacion {
     position: fixed;
     bottom: 20px;
