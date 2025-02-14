@@ -97,9 +97,6 @@
                 query = query.where('estado', '==', estado);
             }
 
-            // Ordenamos solo por fecha para evitar problemas con el índice
-            query = query.orderBy('fecha', 'asc');
-
             // Escuchamos los cambios en tiempo real
             query.onSnapshot((snapshot) => {
                 listaCitas.innerHTML = '';
@@ -127,18 +124,24 @@
                     return;
                 }
 
-                // Ordenamos las citas por fecha y hora
+                // Ordenamos las citas por estado (pendientes primero), fecha y hora
                 const citas = [];
                 snapshot.forEach((doc) => {
                     citas.push({ id: doc.id, ...doc.data() });
                 });
                 
-                // Ordenamos primero por fecha y luego por hora
+                // Ordenamos las citas por estado (pendientes primero), fecha y hora
                 citas.sort((a, b) => {
-                    if (a.fecha === b.fecha) {
-                        return a.hora.localeCompare(b.hora);
+                    // Si el estado es diferente, las pendientes van primero
+                    if ((a.estado || 'pendiente') !== (b.estado || 'pendiente')) {
+                        return (a.estado || 'pendiente') === 'pendiente' ? -1 : 1;
                     }
-                    return b.fecha.localeCompare(a.fecha); // Orden descendente por fecha
+                    // Si la fecha es diferente, ordenar por fecha
+                    if (a.fecha !== b.fecha) {
+                        return a.fecha.localeCompare(b.fecha);
+                    }
+                    // Si la fecha es igual, ordenar por hora
+                    return a.hora.localeCompare(b.hora);
                 });
 
                 citas.forEach((cita) => {
