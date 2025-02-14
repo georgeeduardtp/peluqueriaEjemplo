@@ -429,10 +429,12 @@ footer {
 
 /* Media queries para responsive */
 @media screen and (max-width: 768px) {
-    body {
+    html, body {
         overflow-x: hidden;
         width: 100%;
         position: relative;
+        margin: 0;
+        padding: 0;
     }
 
     header {
@@ -440,6 +442,7 @@ footer {
         height: auto;
         flex-wrap: wrap;
         width: 100%;
+        box-sizing: border-box;
     }
 
     .header-logo {
@@ -449,25 +452,28 @@ footer {
     }
 
     .header-content {
-        width: auto;
-        margin-right: 60px;
+        width: calc(100% - 70px);
+        margin-right: 0;
         order: 2;
         flex: 1;
+        position: relative;
     }
 
     .header-content h1 {
         font-size: 22px;
         margin: 0;
         text-align: center;
+        padding-right: 40px;
     }
 
     .menu-toggle {
         display: block;
         position: absolute;
         right: 15px;
-        top: 25px;
+        top: 50%;
+        transform: translateY(-50%);
         z-index: 1000;
-        background-color: var(--color-gris-oscuro);
+        background-color: transparent;
         padding: 8px;
         border-radius: 4px;
         order: 3;
@@ -476,8 +482,8 @@ footer {
     .nav-menu {
         position: fixed;
         top: 0;
-        right: -100%;
-        width: 80%;
+        right: -100vw;
+        width: 80vw;
         max-width: 300px;
         height: 100vh;
         background-color: var(--color-gris-oscuro);
@@ -486,6 +492,7 @@ footer {
         z-index: 999;
         box-shadow: -5px 0 15px rgba(0,0,0,0.3);
         overflow-y: auto;
+        box-sizing: border-box;
     }
 
     .nav-menu.active {
@@ -497,6 +504,7 @@ footer {
         align-items: center;
         padding: 0;
         margin: 0;
+        width: 100%;
     }
 
     .nav-menu ul li {
@@ -519,11 +527,12 @@ footer {
     }
 
     .nav-menu {
-        width: 100%;
+        width: 100vw;
         max-width: none;
+        right: -100vw;
     }
 
     .header-content {
-        margin-right: 50px;
+        margin-right: 0;
     }
 } 
