@@ -1,2 +1,1 @@
-https://georgeeduardtp.github.io/peluqueriaEjemplo/
-https://georgeeduardtp.github.io/peluqueriaEjemplo/admin.html
+Todos los derechos reservados a George Eduard Turcescu

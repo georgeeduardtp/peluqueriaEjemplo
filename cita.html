@@ -191,14 +191,15 @@
                 const citasRef = db.collection('citas');
                 const snapshot = await citasRef
                     .where('fecha', '==', fecha)
-                    .where('estado', '!=', 'cancelada')
                     .get();
                 
                 const horasOcupadas = new Set();
                 snapshot.forEach(doc => {
                     const cita = doc.data();
-                    console.log('Cita encontrada:', cita);
-                    horasOcupadas.add(cita.hora);
+                    if (cita.estado !== 'cancelada') {
+                        console.log('Cita encontrada:', cita);
+                        horasOcupadas.add(cita.hora);
+                    }
                 });
 
                 console.log('Horas ocupadas:', Array.from(horasOcupadas));
@@ -241,15 +242,42 @@
                 const email = formData.get('email');
                 const servicio = formData.get('servicio');
 
+                console.log('Datos del formulario:', {
+                    fecha,
+                    hora,
+                    nombre,
+                    telefono,
+                    email,
+                    servicio
+                });
+
                 // Verificar que todos los campos requeridos estén completos
                 if (!fecha || !hora || !nombre || !telefono || !email || !servicio) {
+                    console.log('Campos faltantes:', {
+                        fecha: !fecha,
+                        hora: !hora,
+                        nombre: !nombre,
+                        telefono: !telefono,
+                        email: !email,
+                        servicio: !servicio
+                    });
                     mostrarNotificacion('Por favor, complete todos los campos requeridos.');
                     return;
                 }
 
                 // Verificar nuevamente si la hora está disponible
-                const horaDisponible = await verificarHoraDisponible(fecha, hora);
-                if (!horaDisponible) {
+                const citasRef = db.collection('citas');
+                console.log('Verificando disponibilidad para:', { fecha, hora });
+                
+                const snapshot = await citasRef
+                    .where('fecha', '==', fecha)
+                    .where('hora', '==', hora)
+                    .get();
+
+                const citasActivas = snapshot.docs.filter(doc => doc.data().estado !== 'cancelada');
+                console.log('Citas encontradas:', citasActivas.length);
+
+                if (citasActivas.length > 0) {
                     mostrarNotificacion('Lo sentimos, esta hora ya ha sido reservada. Por favor, seleccione otra hora.');
                     verificarHorasOcupadas(fecha);
                     return;
@@ -268,14 +296,17 @@
                     fecha_creacion: firebase.firestore.Timestamp.now()
                 };
 
+                console.log('Intentando guardar datos:', datos);
+
                 // Guardar en Firebase
-                await db.collection('citas').add(datos);
+                const docRef = await db.collection('citas').add(datos);
+                console.log('Cita guardada con ID:', docRef.id);
                 
                 mostrarNotificacion('¡Tu cita ha sido reservada con éxito!');
                 formulario.reset();
                 verificarHorasOcupadas(fecha);
             } catch (error) {
-                console.error('Error específico:', error);
+                console.error('Error completo:', error);
                 mostrarNotificacion('Error al reservar la cita. Por favor, inténtalo de nuevo.');
             }
         });

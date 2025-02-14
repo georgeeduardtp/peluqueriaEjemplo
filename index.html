@@ -13,7 +13,10 @@
         <img src="https://thebiz.me/wp-content/uploads/2020/11/hair-salon-logo-ideas-6.24.22-PM.png" alt="Logo Barbería" class="header-logo">
         <div class="header-content">
             <h1>Barbería Elegante</h1>
-            <nav>
+            <button class="menu-toggle" aria-label="Abrir menú">
+                <i class="fas fa-bars"></i>
+            </button>
+            <nav class="nav-menu">
                 <ul>
                     <li><a href="#inicio">Inicio</a></li>
                     <li><a href="#servicios">Servicios</a></li>
@@ -116,6 +119,23 @@
             if (inicio) {
                 inicio.style.transform = `translateY(${scrolled * 0.15}px)`;
             }
+        });
+
+        // Código para el menú móvil
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navMenu = document.querySelector('.nav-menu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+            menuToggle.classList.toggle('active');
+        });
+
+        // Cerrar menú al hacer clic en un enlace
+        document.querySelectorAll('.nav-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
+                menuToggle.classList.remove('active');
+            });
         });
 
         // Código existente para el parallax de servicios
