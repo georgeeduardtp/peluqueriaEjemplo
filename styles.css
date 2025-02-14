@@ -429,10 +429,17 @@ footer {
 
 /* Media queries para responsive */
 @media screen and (max-width: 768px) {
+    body {
+        overflow-x: hidden;
+        width: 100%;
+        position: relative;
+    }
+
     header {
         padding: 15px;
         height: auto;
         flex-wrap: wrap;
+        width: 100%;
     }
 
     .header-logo {
@@ -443,8 +450,9 @@ footer {
 
     .header-content {
         width: auto;
-        margin-right: 60px; /* Espacio para el botón hamburguesa */
+        margin-right: 60px;
         order: 2;
+        flex: 1;
     }
 
     .header-content h1 {
@@ -455,7 +463,7 @@ footer {
 
     .menu-toggle {
         display: block;
-        position: fixed;
+        position: absolute;
         right: 15px;
         top: 25px;
         z-index: 1000;
@@ -477,6 +485,7 @@ footer {
         transition: right 0.3s ease;
         z-index: 999;
         box-shadow: -5px 0 15px rgba(0,0,0,0.3);
+        overflow-y: auto;
     }
 
     .nav-menu.active {
@@ -486,6 +495,8 @@ footer {
     .nav-menu ul {
         flex-direction: column;
         align-items: center;
+        padding: 0;
+        margin: 0;
     }
 
     .nav-menu ul li {
@@ -493,6 +504,7 @@ footer {
         font-size: 18px;
         display: block;
         text-align: center;
+        width: 100%;
     }
 
     .boton-cita {
